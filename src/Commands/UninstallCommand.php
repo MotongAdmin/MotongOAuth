@@ -438,15 +438,21 @@ class UninstallCommand extends HyperfCommand
         }
         
         $this->output->writeln("  前端项目路径: {$adminWebDir}");
-        
+
+        $baseDir = $adminWebDir . '/src';
+
+        $relativeApiPath = '/api/system/oauth.js';
+        $relativeViewPath = '/views/system/oauth/index.vue';
+        $relativeViewDir = '/views/system/oauth';
+
         // 定义要清理的文件和目录
         $filesToRemove = [
-            'API文件' => $adminWebDir . '/src/api/system/oauth.js',
-            '视图文件' => $adminWebDir . '/src/views/system/oauth/index.vue'
+            'API文件' => $baseDir . $relativeApiPath,
+            '视图文件' => $baseDir . $relativeViewPath
         ];
         
         $dirsToRemove = [
-            'OAuth视图目录' => $adminWebDir . '/src/views/system/oauth'
+            'OAuth视图目录' => $baseDir . $relativeViewDir
         ];
         
         // 删除文件

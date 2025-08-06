@@ -928,8 +928,13 @@ class InstallCommand extends HyperfCommand
             return;
         }
 
-        $apiDir = $adminWebDir . '/src/api/system/oauth.js';
-        $viewDir = $adminWebDir . '/src/views/system/oauth/index.vue';
+        $baseDir = $adminWebDir . '/src';
+
+        $relativeApiPath = '/api/system/oauth.js';
+        $relativeViewPath = '/views/system/oauth/index.vue';
+
+        $apiDir = $baseDir . $relativeApiPath;
+        $viewDir = $baseDir . $relativeViewPath;
 
         // 检查目标文件是否已存在
         $apiExists = file_exists($apiDir);
@@ -940,14 +945,15 @@ class InstallCommand extends HyperfCommand
             return;
         }
 
-        $oauthDir = $adminWebDir . '/src/views/system/oauth';
+        $oauthDir = $baseDir . '/views/system/oauth';
         if (!file_exists($oauthDir)) {
             mkdir($oauthDir, 0755, true);
         }
 
         // 定义源文件路径
-        $sourceApiFile = __DIR__ . '/../assets/admin/api/oauth.js';
-        $sourceViewFile = __DIR__ . '/../assets/admin/views/oauth/index.vue';
+        $baseSourceDir = __DIR__ . '/../assets/admin';
+        $sourceApiFile = $baseSourceDir . $relativeApiPath;
+        $sourceViewFile = $baseSourceDir . $relativeViewPath;
         
         if (!file_exists($sourceApiFile) || !file_exists($sourceViewFile)) {
             $this->output->writeln('<error>⚠️  源文件缺失，无法复制前端模板</error>');
