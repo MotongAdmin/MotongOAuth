@@ -24,5 +24,12 @@
 /app/Config/database.php
 /vendors/*
 
+.git/
+runtime/
+.phpintel/
+.DS_Store
+.phpunit*
+.env
+
 # 强制包含OAuth相关文件（覆盖全局gitignore中的oauth忽略规则）
-!/src/assets/oauth/*
+!/src/assets/**/*
