@@ -68,6 +68,7 @@ class InstallCommand extends HyperfCommand
         $this->addOption('skip-menu', null, InputOption::VALUE_NONE, '跳过菜单项初始化');
         $this->addOption('skip-dict', null, InputOption::VALUE_NONE, '跳过字典数据初始化');
         $this->addOption('skip-frontend', null, InputOption::VALUE_NONE, '跳过前端模板文件复制');
+        $this->addOption('skip-uniapp', null, InputOption::VALUE_NONE, '跳过Uniapp模板文件复制');
     }
 
     public function handle()
@@ -104,6 +105,13 @@ class InstallCommand extends HyperfCommand
                 $this->copyFrontendTemplates();
             } else {
                 $this->output->writeln('<comment>跳过前端资源文件复制</comment>');
+            }
+
+            // 步骤6: 复制Uniapp模板文件
+            if (!$this->input->getOption('skip-uniapp')) {
+                $this->copyUniappTemplates();
+            } else {
+                $this->output->writeln('<comment>跳过Uniapp模板文件复制</comment>');
             }
 
             $this->output->success('✅ OAuth模块安装完成！');
@@ -938,8 +946,8 @@ class InstallCommand extends HyperfCommand
         }
 
         // 定义源文件路径
-        $sourceApiFile = __DIR__ . '/../assets/api/oauth.js';
-        $sourceViewFile = __DIR__ . '/../assets/views/oauth/index.vue';
+        $sourceApiFile = __DIR__ . '/../assets/admin/api/oauth.js';
+        $sourceViewFile = __DIR__ . '/../assets/admin/views/oauth/index.vue';
         
         if (!file_exists($sourceApiFile) || !file_exists($sourceViewFile)) {
             $this->output->writeln('<error>⚠️  源文件缺失，无法复制前端模板</error>');
@@ -972,6 +980,89 @@ class InstallCommand extends HyperfCommand
         }
         
         $this->output->writeln('<info>✅ 前端模板复制完成</info>');
+    }
+
+    /**
+     * 拷贝用户端资源到对应的工程目录
+     * @return void
+     */
+    protected function copyUniappTemplates(): void 
+    {
+        $this->output->section('📋 复制Uniapp模板');
+
+        $uniappDir = $this->container->get(ConfigInterface::class)->get('hyperf-common.uniapp_path');   
+        
+        if (empty($uniappDir)) {
+            $this->output->writeln('<comment>⚠️  未配置Uniapp项目路径(UNIAPP_PATH)，跳过Uniapp模板复制</comment>');
+            $this->output->writeln('<comment>如需复制Uniapp模板，请设置环境变量 UNIAPP_PATH</comment>');
+            return;
+        }
+        
+        $apiDir = $uniappDir . '/api/mt_oauth';
+
+        // 定义源文件路径
+        $sourceApiDir = __DIR__ . '/../assets/uniapp/api/mt_oauth';
+
+        if (!file_exists($sourceApiDir)) {
+            $this->output->writeln('<error>⚠️  源文件缺失，无法复制前端模板</error>');
+            return;
+        }
+
+        // 检查目标目录是否存在，如果存在则跳过复制
+        if (file_exists($apiDir)) {
+            $this->output->writeln('  ✓ Uniapp模板已存在，跳过复制');
+            return;
+        }
+
+        // 创建目标目录
+        if (!file_exists(dirname($apiDir))) {
+            mkdir(dirname($apiDir), 0755, true);
+        }
+        
+        // 递归复制目录
+        $this->recursiveCopy($sourceApiDir, $apiDir);
+        $this->output->writeln('  ✓ 复制Uniapp API模板成功');
+    }
+
+    /**
+     * 递归复制目录
+     * @param string $sourceDir 源目录
+     * @param string $targetDir 目标目录
+     * @return void
+     */
+    private function recursiveCopy($sourceDir, $targetDir)
+    {
+        // 确保目标目录存在
+        if (!file_exists($targetDir)) {
+            mkdir($targetDir, 0755, true);
+        }
+        
+        $dir = opendir($sourceDir);
+        while (($file = readdir($dir)) !== false) {
+            if ($file == '.' || $file == '..') continue;
+            $sourcePath = $sourceDir . '/' . $file;
+            $targetPath = $targetDir . '/' . $file;
+
+            if (is_dir($sourcePath)) {
+                if (!file_exists($targetPath)) {
+                    mkdir($targetPath, 0755, true);
+                }
+                $this->recursiveCopy($sourcePath, $targetPath);
+            } else {
+                // 确保目标文件的父目录存在
+                $targetFileDir = dirname($targetPath);
+                if (!file_exists($targetFileDir)) {
+                    mkdir($targetFileDir, 0755, true);
+                }
+                
+                if (copy($sourcePath, $targetPath)) {
+                    $this->output->writeln("  ✓ 复制文件: {$file}");
+                } else {
+                    $this->output->writeln("  ✗ 复制文件失败: {$file}");
+                }
+            }
+        }
+        closedir($dir);
     }
 
     /**

@@ -153,7 +153,6 @@ class UninstallCommand extends HyperfCommand
         $this->output->writeln('  • 清理字段字典绑定关系');
         if (!$this->input->getOption('skip-frontend')) {
             $this->output->writeln('  • 删除前端OAuth文件和目录');
-            $this->output->writeln('  • 清理.gitignore中的OAuth规则');
         }
         $this->output->writeln('');
         
@@ -397,8 +396,7 @@ class UninstallCommand extends HyperfCommand
         
         $frontendFiles = [
             'api' => $adminWebDir . '/src/api/system/oauth.js',
-            'view' => $adminWebDir . '/src/views/system/oauth/index.vue',
-            'gitignore' => $adminWebDir . '/.gitignore'
+            'view' => $adminWebDir . '/src/views/system/oauth/index.vue'
         ];
         
         $backupFiles = [];
