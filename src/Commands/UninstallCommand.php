@@ -17,6 +17,8 @@ use App\Model\SysFieldDict;
 use App\Model\SysDictType;
 use App\Model\SysMenu;
 use App\Model\SysRoleMenu;
+use App\Model\SysApi;
+use App\Model\SysMenuApi;
 
 /**
  * OAuth模块卸载命令
@@ -74,6 +76,7 @@ class UninstallCommand extends HyperfCommand
         $this->addOption('skip-dict', null, InputOption::VALUE_NONE, '跳过字典数据清理');
         $this->addOption('skip-menu', null, InputOption::VALUE_NONE, '跳过菜单权限清理');
         $this->addOption('skip-frontend', null, InputOption::VALUE_NONE, '跳过前端文件清理');
+        $this->addOption('skip-permission', null, InputOption::VALUE_NONE, '跳过权限数据清理');
         $this->addOption('backup', 'b', InputOption::VALUE_NONE, '卸载前备份数据');
     }
 
@@ -114,7 +117,14 @@ class UninstallCommand extends HyperfCommand
                 $this->output->writeln('<comment>跳过前端文件清理</comment>');
             }
 
-            // 步骤5: 删除数据库表
+            // 步骤5: 清理权限数据
+            if (!$this->input->getOption('skip-permission')) {
+                $this->cleanupPermissionData();
+            } else {
+                $this->output->writeln('<comment>跳过权限数据清理</comment>');
+            }
+
+            // 步骤6: 删除数据库表
             if (!$this->input->getOption('skip-tables')) {
                 $this->dropDatabaseTables();
             } else {
@@ -272,7 +282,7 @@ class UninstallCommand extends HyperfCommand
         $this->output->section('🔑 清理菜单权限');
         
         // 获取OAuth相关菜单
-        $oauthMenus = SysMenu::where('perms', 'like', 'system:oauth:%')->get();
+        $oauthMenus = SysMenu::where('perms', 'like', 'system:oauth:%')->withTrashed()->get();
         
         if ($oauthMenus->isEmpty()) {
             $this->output->writeln('<comment>未找到OAuth相关菜单</comment>');
@@ -294,13 +304,13 @@ class UninstallCommand extends HyperfCommand
         
         // 先删除按钮菜单
         foreach ($buttonMenus as $menu) {
-            $menu->delete();
+            $menu->forceDelete();
             $this->output->writeln("  - 删除按钮菜单: {$menu->menu_name} ({$menu->perms})");
         }
         
         // 再删除页面菜单
         foreach ($pageMenus as $menu) {
-            $menu->delete();
+            $menu->forceDelete();
             $this->output->writeln("  - 删除页面菜单: {$menu->menu_name} ({$menu->perms})");
         }
         
@@ -532,6 +542,31 @@ class UninstallCommand extends HyperfCommand
         }
         
         $this->output->writeln('<info>✅ 数据库表删除完成</info>');
+    }
+
+    protected function cleanupPermissionData(): void
+    {
+        $this->output->section('📝 清理权限数据');
+        
+        // 删除OAuth相关API
+        $count = SysApi::where('api_path', 'like', '/admin/oauthConfig/%')->delete();
+        $this->output->writeln("  - 删除OAuth相关API: {$count} 条");
+
+        // 删除OAuth相关菜单
+        $oauthMenus = SysMenu::where('perms', 'like', 'system:oauthConfig:%')->get();
+        $allIds = $oauthMenus->pluck('menu_id')->toArray();
+        $count = SysMenu::whereIn('menu_id', $allIds)->delete();
+        $this->output->writeln("  - 删除OAuth相关菜单: {$count} 条");
+
+        // 删除OAuth相关角色菜单关联
+        $count = SysRoleMenu::whereIn('menu_id', $allIds)->delete();
+        $this->output->writeln("  - 删除OAuth相关角色菜单关联: {$count} 条");
+        
+        // 删除菜单api绑定数据
+        $count = SysMenuApi::whereIn('menu_id', $allIds)->delete();
+        $this->output->writeln("  - 删除OAuth相关菜单api绑定数据: {$count} 条");
+
+        $this->output->writeln('<info>✅ 权限数据清理完成</info>');
     }
 
     /**

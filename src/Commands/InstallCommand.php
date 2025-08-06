@@ -114,6 +114,9 @@ class InstallCommand extends HyperfCommand
                 $this->output->writeln('<comment>跳过Uniapp模板文件复制</comment>');
             }
 
+            // 步骤7: 初始化权限数据
+            $this->initPermissionData();
+
             $this->output->success('✅ OAuth模块安装完成！');
             $this->printSummary();
 
@@ -124,6 +127,16 @@ class InstallCommand extends HyperfCommand
         }
 
         return 0;
+    }
+
+    protected function initPermissionData(): void
+    {
+        $this->output->section('📝 初始化权限数据');
+        
+        //执行motong:oauth:init-permission命令
+        $this->call('motong:oauth:init-permission');
+
+        $this->output->writeln('<info>✅ 权限数据初始化完成</info>');
     }
 
     /**
@@ -716,7 +729,7 @@ class InstallCommand extends HyperfCommand
             // 平台配置页面菜单
             [
                 'menu_id' => $nextMenuId,
-                'menu_name' => '平台授权',
+                'menu_name' => '三方平台',
                 'parent_id' => $parentId,
                 'order_num' => 10,
                 'path' => 'oauth',
