@@ -12,7 +12,7 @@ use Hyperf\Di\Annotation\Inject;
 use ZYProSoft\Http\AuthedRequest;
 
 /**
- * @AutoController(prefix="/admin/oauthConfig")
+ * @AutoController(prefix="/system/oauthConfig")
  * OAuth配置管理控制器 - 管理后台
  * 
  * @author Motong OAuth Team

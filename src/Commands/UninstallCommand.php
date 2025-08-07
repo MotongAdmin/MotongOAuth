@@ -549,7 +549,7 @@ class UninstallCommand extends HyperfCommand
         $this->output->section('📝 清理权限数据');
         
         // 删除OAuth相关API
-        $count = SysApi::where('api_path', 'like', '/admin/oauthConfig/%')->delete();
+        $count = SysApi::where('api_path', 'like', '/system/oauthConfig/%')->delete();
         $this->output->writeln("  - 删除OAuth相关API: {$count} 条");
 
         // 删除OAuth相关菜单

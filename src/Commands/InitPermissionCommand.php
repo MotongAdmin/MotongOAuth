@@ -74,16 +74,16 @@ class InitPermissionCommand extends HyperfCommand
         // OAuth模块管理端API列表
         $apis = [
             // OAuth配置管理分组
-            ['api_name' => 'admin.oauthConfig.getList', 'api_path' => '/admin/oauthConfig/getList', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '获取OAuth配置列表', 'status' => 1],
-            ['api_name' => 'admin.oauthConfig.getDetail', 'api_path' => '/admin/oauthConfig/getDetail', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '获取OAuth配置详情', 'status' => 1],
-            ['api_name' => 'admin.oauthConfig.create', 'api_path' => '/admin/oauthConfig/create', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '创建OAuth配置', 'status' => 1],
-            ['api_name' => 'admin.oauthConfig.update', 'api_path' => '/admin/oauthConfig/update', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '更新OAuth配置', 'status' => 1],
-            ['api_name' => 'admin.oauthConfig.delete', 'api_path' => '/admin/oauthConfig/delete', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '删除OAuth配置', 'status' => 1],
-            ['api_name' => 'admin.oauthConfig.enable', 'api_path' => '/admin/oauthConfig/enable', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '启用OAuth配置', 'status' => 1],
-            ['api_name' => 'admin.oauthConfig.disable', 'api_path' => '/admin/oauthConfig/disable', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '禁用OAuth配置', 'status' => 1],
-            ['api_name' => 'admin.oauthConfig.testConnection', 'api_path' => '/admin/oauthConfig/testConnection', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '测试OAuth配置连接', 'status' => 1],
-            ['api_name' => 'admin.oauthConfig.getSupportedOptions', 'api_path' => '/admin/oauthConfig/getSupportedOptions', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '获取支持的平台和客户端类型', 'status' => 1],
-            ['api_name' => 'admin.oauthConfig.batchAction', 'api_path' => '/admin/oauthConfig/batchAction', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '批量操作OAuth配置', 'status' => 1],
+            ['api_name' => 'system.oauthConfig.getList', 'api_path' => '/system/oauthConfig/getList', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '获取OAuth配置列表', 'status' => 1],
+            ['api_name' => 'system.oauthConfig.getDetail', 'api_path' => '/system/oauthConfig/getDetail', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '获取OAuth配置详情', 'status' => 1],
+            ['api_name' => 'system.oauthConfig.create', 'api_path' => '/system/oauthConfig/create', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '创建OAuth配置', 'status' => 1],
+            ['api_name' => 'system.oauthConfig.update', 'api_path' => '/system/oauthConfig/update', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '更新OAuth配置', 'status' => 1],
+            ['api_name' => 'system.oauthConfig.delete', 'api_path' => '/system/oauthConfig/delete', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '删除OAuth配置', 'status' => 1],
+            ['api_name' => 'system.oauthConfig.enable', 'api_path' => '/system/oauthConfig/enable', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '启用OAuth配置', 'status' => 1],
+            ['api_name' => 'system.oauthConfig.disable', 'api_path' => '/system/oauthConfig/disable', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '禁用OAuth配置', 'status' => 1],
+            ['api_name' => 'system.oauthConfig.testConnection', 'api_path' => '/system/oauthConfig/testConnection', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '测试OAuth配置连接', 'status' => 1],
+            ['api_name' => 'system.oauthConfig.getSupportedOptions', 'api_path' => '/system/oauthConfig/getSupportedOptions', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '获取支持的平台和客户端类型', 'status' => 1],
+            ['api_name' => 'system.oauthConfig.batchAction', 'api_path' => '/system/oauthConfig/batchAction', 'api_method' => 'POST', 'api_group' => 'oauth', 'description' => '批量操作OAuth配置', 'status' => 1],
         ];
         
         $created = [];
@@ -109,24 +109,24 @@ class InitPermissionCommand extends HyperfCommand
         // OAuth API到菜单权限的映射关系
         $apiToMenuPermissionMapping = [
             // 查询相关API映射到查询权限
-            'admin.oauthConfig.getList' => 'system:oauth:query',
-            'admin.oauthConfig.getDetail' => 'system:oauth:query',
-            'admin.oauthConfig.getSupportedOptions' => 'system:oauth:query',
+            'system.oauthConfig.getList' => 'system:oauth:query',
+            'system.oauthConfig.getDetail' => 'system:oauth:query',
+            'system.oauthConfig.getSupportedOptions' => 'system:oauth:query',
             
             // 添加相关API映射到添加权限
-            'admin.oauthConfig.create' => 'system:oauth:add',
+            'system.oauthConfig.create' => 'system:oauth:add',
             
             // 修改相关API映射到修改权限
-            'admin.oauthConfig.update' => 'system:oauth:edit',
-            'admin.oauthConfig.enable' => 'system:oauth:edit',
-            'admin.oauthConfig.disable' => 'system:oauth:edit',
-            'admin.oauthConfig.batchAction' => 'system:oauth:edit',
+            'system.oauthConfig.update' => 'system:oauth:edit',
+            'system.oauthConfig.enable' => 'system:oauth:edit',
+            'system.oauthConfig.disable' => 'system:oauth:edit',
+            'system.oauthConfig.batchAction' => 'system:oauth:edit',
             
             // 删除相关API映射到删除权限
-            'admin.oauthConfig.delete' => 'system:oauth:remove',
+            'system.oauthConfig.delete' => 'system:oauth:remove',
             
             // 测试相关API映射到测试权限
-            'admin.oauthConfig.testConnection' => 'system:oauth:test',
+            'system.oauthConfig.testConnection' => 'system:oauth:test',
         ];
         
         $created = [];

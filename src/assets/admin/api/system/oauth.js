@@ -6,7 +6,7 @@ import { callService } from '@/api/common'
 
 // 获取OAuth配置列表
 export function getOAuthConfigList(params) {
-  return callService('admin.oauthConfig.getList', {
+  return callService('system.oauthConfig.getList', {
     page: params.page || 1,
     page_size: params.pageSize || 10,
     platform: params.platform,
@@ -18,12 +18,12 @@ export function getOAuthConfigList(params) {
 
 // 获取OAuth配置详情
 export function getOAuthConfigDetail(id) {
-  return callService('admin.oauthConfig.getDetail', { id })
+  return callService('system.oauthConfig.getDetail', { id })
 }
 
 // 创建OAuth配置
 export function createOAuthConfig(data) {
-  return callService('admin.oauthConfig.create', {
+  return callService('system.oauthConfig.create', {
     name: data.name,
     description: data.description,
     platform: data.platform,
@@ -42,7 +42,7 @@ export function createOAuthConfig(data) {
 
 // 更新OAuth配置
 export function updateOAuthConfig(id, data) {
-  return callService('admin.oauthConfig.update', {
+  return callService('system.oauthConfig.update', {
     id: id,
     name: data.name,
     description: data.description,
@@ -59,32 +59,32 @@ export function updateOAuthConfig(id, data) {
 
 // 删除OAuth配置
 export function deleteOAuthConfig(id) {
-  return callService('admin.oauthConfig.delete', { id })
+  return callService('system.oauthConfig.delete', { id })
 }
 
 // 启用OAuth配置
 export function enableOAuthConfig(id) {
-  return callService('admin.oauthConfig.enable', { id })
+  return callService('system.oauthConfig.enable', { id })
 }
 
 // 禁用OAuth配置
 export function disableOAuthConfig(id) {
-  return callService('admin.oauthConfig.disable', { id })
+  return callService('system.oauthConfig.disable', { id })
 }
 
 // 测试OAuth配置连接
 export function testOAuthConnection(id) {
-  return callService('admin.oauthConfig.testConnection', { id })
+  return callService('system.oauthConfig.testConnection', { id })
 }
 
 // 获取支持的平台和客户端类型
 export function getSupportedOptions() {
-  return callService('admin.oauthConfig.getSupportedOptions', {})
+  return callService('system.oauthConfig.getSupportedOptions', {})
 }
 
 // 批量操作OAuth配置
 export function batchActionOAuthConfig(ids, action) {
-  return callService('admin.oauthConfig.batchAction', {
+  return callService('system.oauthConfig.batchAction', {
     ids: ids,
     action: action
   })
