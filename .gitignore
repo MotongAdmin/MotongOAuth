@@ -33,3 +33,4 @@ runtime/
 
 # 强制包含OAuth相关文件（覆盖全局gitignore中的oauth忽略规则）
 !/src/assets/**/*
+src/assets/.DS_Store
