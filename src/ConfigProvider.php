@@ -12,8 +12,6 @@ declare(strict_types=1);
  * @license  GPL
  */
 namespace Motong\OAuth;
-use Motong\OAuth\Commands\InitModuleCommand;
-use Motong\OAuth\Commands\DatabaseInitCommand;
 
 class ConfigProvider
 {
